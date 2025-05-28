@@ -1,0 +1,24 @@
+from django.contrib import admin
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
+from users.views import RegistrationViewSet, UserViewSet
+from dz_users.views import ChangePasswordView
+
+router = DefaultRouter()
+router.register(
+    prefix="registration", viewset=RegistrationViewSet,
+    basename="registration"
+)
+router.register(
+    prefix="users", viewset=UserViewSet, 
+    basename="users"
+)
+
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
+    path("api/v1/", include(router.urls)),
+    path("api/v1/change-password/", ChangePasswordView.as_view()),
+]
