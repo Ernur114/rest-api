@@ -24,7 +24,7 @@ class PublicSerializer(serializers.Serializer):
         public = Public(
             owner=validated_data.get("owner"),
             title=validated_data.get("title"),
-            is_group=validated_data.get("is_group")
+            is_private=validated_data.get("is_private")
         )
         public.save()
         public.members.set(objs=validated_data.get("members"))

@@ -23,9 +23,14 @@ class ChatSerializer(serializers.Serializer):
 
     def update(self, instance: Chat, validated_data: dict):
         users = validated_data.pop("users")
+        if title := validated_data.get("title"):
+            instance.title = title
+        if is_group := validated_data.get("is_group"):
+            instance.is_group = is_group
         if users:
             instance.users.set(users)
-        return super().update(instance, validated_data)
+        instance.save()
+        return instance
 
 
 class MessageViewSerializer(serializers.Serializer):
