@@ -22,13 +22,14 @@ class ChatSerializer(serializers.Serializer):
         return chat
 
     def update(self, instance: Chat, validated_data: dict):
-        users = validated_data.pop("users")
-        if title := validated_data.get("title"):
-            instance.title = title
-        if is_group := validated_data.get("is_group"):
-            instance.is_group = is_group
-        if users:
-            instance.users.set(users)
+        # users = validated_data.pop("users")
+        for key, value in validated_data.items():
+            if key == "users":
+                instance.users.set(value)
+                continue
+            setattr(instance, key, value)
+        # if users:
+        #     instance.users.set(users)
         instance.save()
         return instance
 
