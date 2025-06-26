@@ -1,14 +1,10 @@
 # Python
 import rsa
-import logging
 import os
 
 # Django
 from django.core.management.base import BaseCommand
 from django.conf import settings
-
-
-logger = logging.getLogger(name=__name__)
 
 
 class Command(BaseCommand):
@@ -20,10 +16,10 @@ class Command(BaseCommand):
             public.write(public_key_str)
         with open(f"{settings.KEYS_PATH}/private.txt", "w") as private:
             private.write(private_key_str)
-        logger.info("Keys created!")
+        print("Keys created!")
 
     def handle(self, *args, **options):
         os.makedirs(settings.KEYS_PATH, exist_ok=True)
-        logger.info("Start Generate Keys")
+        print("Start Generate Keys")
         self.generate()
-        logger.info("Keys generated successfully")
+        print("Keys generated successfully")

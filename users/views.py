@@ -1,5 +1,6 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -46,6 +47,12 @@ class RegistrationViewSet(ViewSet):
             )
 
 
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 10  # сколько объектов на странице
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 class UserViewSet(ViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -80,12 +87,17 @@ class UserViewSet(ViewSet):
         responses={200: UserSerializer(many=True)}
     )
     def list(self, request: Request) -> Response:
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(
-            data=serializer.data, status=status.HTTP_200_OK
-        )
-
+        queryset = User.objects.all() # Достаем пользователей
+        paginator = CustomPageNumberPagination() # объявляем пагинатор
+        items = paginator.paginate_queryset(
+            queryset=queryset, request=request
+        ) # делим юзеров на кучки
+        serializer = UserSerializer(
+            instance=items, many=True
+        ) # в сериализатор передаем кучки пользователей
+        return paginator.get_paginated_response(
+            data=serializer.data
+        ) # вывод с пагинацией
 
     @swagger_auto_schema(
         responses={
