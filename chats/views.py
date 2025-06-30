@@ -1,6 +1,6 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.viewsets import ViewSet
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -52,10 +52,7 @@ class ChatsViewSet(ViewSet):
         try:
             chat: Chat = request.user.users_chats.get(pk=pk)
         except Chat.DoesNotExist:
-            return Response(
-                data="chat not exist",
-                status=status.HTTP_404_NOT_FOUND
-            )
+            raise NotFound(detail="chat not exist")
         serializer = ChatViewSerializer(instance=chat)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 

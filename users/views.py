@@ -1,12 +1,13 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
@@ -14,6 +15,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from users.serializers import UserModelSerializer, UserSerializer
 from users.models import Codes
+from common.paginators import CustomPageNumberPagination
 
 
 class RegistrationViewSet(ViewSet):
@@ -45,12 +47,6 @@ class RegistrationViewSet(ViewSet):
                 data={"error": str(e)},
                 status=status.HTTP_409_CONFLICT
             )
-
-
-class CustomPageNumberPagination(PageNumberPagination):
-    page_size = 10  # сколько объектов на странице
-    page_size_query_param = 'page_size'
-    max_page_size = 100
 
 
 class UserViewSet(ViewSet):
@@ -86,6 +82,7 @@ class UserViewSet(ViewSet):
     @swagger_auto_schema(
         responses={200: UserSerializer(many=True)}
     )
+    @method_decorator(cache_page(timeout=60))
     def list(self, request: Request) -> Response:
         queryset = User.objects.all() # Достаем пользователей
         paginator = CustomPageNumberPagination() # объявляем пагинатор

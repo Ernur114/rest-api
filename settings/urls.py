@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from debug_toolbar.toolbar import debug_toolbar_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -63,3 +65,6 @@ urlpatterns = [
          name="schema-swagger-ui"
     ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += debug_toolbar_urls()
