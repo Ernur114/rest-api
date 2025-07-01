@@ -3,9 +3,12 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.viewsets import ViewSet
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import QuerySet
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 
 from publics.models import Public, PublicInvite
@@ -15,20 +18,27 @@ from publics.serializers import (
 
 
 class PublicViewSet(ViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
+    @method_decorator(cache_page(timeout=60*10))
     def list(self, request: Request) -> Response:
+        # publics: QuerySet[Public] = \
+        #     Public.objects.select_related("owner").filter(is_private=False)
         publics: QuerySet[Public] = \
-            Public.objects.filter(is_private=False)
+            Public.objects.select_related(
+                "owner"
+            ).prefetch_related("members").filter(is_private=False)
         serializer = PublicViewSerializer(
             instance=publics, many=True
         )
         return Response(data=serializer.data)
 
+    @method_decorator(cache_page(timeout=600))
     def retrieve(self, request: Request, pk: int) -> Response:
-        public: Public = get_object_or_404(
-            Public, pk=pk, members=request.user
-        )
+        # public: Public = get_object_or_404(
+        #     Public, pk=pk, members=request.user
+        # )
+        public = Public.objects.select_related("owner").get(pk=pk)
         serializer = PublicViewSerializer(instance=public)
         return Response(data=serializer.data)
 
