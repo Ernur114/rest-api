@@ -64,7 +64,4 @@ urlpatterns = [
          view=schema_view.with_ui("swagger", cache_timeout=0),
          name="schema-swagger-ui"
     ),
-]
-
-if settings.DEBUG:
-    urlpatterns += debug_toolbar_urls()
+] + debug_toolbar_urls()

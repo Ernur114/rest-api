@@ -22,12 +22,9 @@ class PublicViewSet(ViewSet):
     
     @method_decorator(cache_page(timeout=60*10))
     def list(self, request: Request) -> Response:
-        # publics: QuerySet[Public] = \
-        #     Public.objects.select_related("owner").filter(is_private=False)
-        publics: QuerySet[Public] = \
-            Public.objects.select_related(
-                "owner"
-            ).prefetch_related("members").filter(is_private=False)
+        publics: QuerySet[Public] = Public.objects.select_related(
+            "owner"
+        ).prefetch_related("members").filter(is_private=False)
         serializer = PublicViewSerializer(
             instance=publics, many=True
         )
