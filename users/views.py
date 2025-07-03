@@ -36,10 +36,7 @@ class RegistrationViewSet(ViewSet):
         s.is_valid(raise_exception=True)
         s.validated_data["is_active"] = False
         try:
-            user = User.objects.create_user(**s.validated_data)
-            code = Codes(user=user)
-            code.save()
-            # отправка письма с кодом активации
+            User.objects.create_user(**s.validated_data)
             return Response(
                 data={"message": "User successfully registered"},
                 status=status.HTTP_201_CREATED # Лучше 201
@@ -63,16 +60,15 @@ class UserViewSet(ViewSet):
         return user
 
     @action(
-        detail=True, methods=["GET"],
-        url_path="activate",
+        detail=False, methods=["GET"],
+        url_path="activate/(?P<code>[^/.]+)",
         url_name="activate"
     )
     def activation_page(
-        self, request: Request, pk: int
+        self, request: Request, code: str
     ) -> Response:
-        user = get_object_or_404(User, pk=pk)
-        code = request.query_params.get("code")
-        obj: Codes = get_object_or_404(Codes, user=user, code=code)
+        obj: Codes = get_object_or_404(Codes, code=code)
+        user = obj.user
         now = timezone.now()
         diff = now - obj.created_at
         if diff.seconds > 180:
