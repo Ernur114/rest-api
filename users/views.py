@@ -137,7 +137,6 @@ class UserViewSet(ViewSet):
         }
     )
     def partial_update(self, request: Request, pk: int) -> Response:
-        User.objects.prefetch_related
         user = self.check_user(request=request, pk=pk)
         serializer = UserModelSerializer(
             instance=user, data=request.data, partial=True

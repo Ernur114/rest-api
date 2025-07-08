@@ -42,7 +42,7 @@ def post_registration(
 @receiver(signal=pre_save, sender=User)
 def log_something(instance: User, **kwargs):
     user = User.objects.get(pk=instance.pk)
-    # if user.password != instance.password:
-    #     send_email()
-    #     return
+    if user.password != instance.password:
+        send_email()
+        return
     
