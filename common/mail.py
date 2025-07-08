@@ -6,7 +6,9 @@ from loguru import logger
 
 
 def send_email(
-    template: str, context: dict, to: str, title: str
+    template: str, 
+    to: str | list[str], title: str,
+    context: dict | None = None
 ):
     try:
         text = strip_tags(value=template).strip()
@@ -19,7 +21,7 @@ def send_email(
         msg = EmailMultiAlternatives(
             subject=title, body=text_content,
             from_email=settings.EMAIL_HOST_USER,
-            to=[to],
+            to=[to] if isinstance(to, str) else to,
         )
         msg.attach_alternative(html_content, "text/html")
         msg.send(fail_silently=False)
