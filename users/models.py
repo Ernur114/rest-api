@@ -1,29 +1,52 @@
+import uuid
+from datetime import timedelta
+
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from dirtyfields import DirtyFieldsMixin
 
 
-class Codes(models.Model):
-    code = models.CharField(
+def save_avatar_to(instance, filename):
+    return f"avatars/{instance.username}/{filename}"
+
+
+class Client(DirtyFieldsMixin, AbstractUser):
+    email = models.EmailField(
+        verbose_name="эл. почта",
+        max_length=100,
+        unique=True
+    )
+    activation_code = models.UUIDField(
         verbose_name="код активации",
-        unique=False,
-        default="qwertyuiop"
+        unique=True,
+        default=uuid.uuid4
     )
-    user = models.OneToOneField(
-        to=User,
-        on_delete=models.CASCADE,
-        related_name="user_code",
-        verbose_name="пользователь"
+    expired_code = models.DateTimeField(
+        verbose_name="срок действия кода"
     )
-    created_at = models.DateTimeField(
-        verbose_name="дата создания",
-        default=timezone.now
+    avatar = models.ImageField(
+        verbose_name="аватар пользователя",
+        upload_to=save_avatar_to,
+        blank=True,
+        null=True
+    )
+    friends = models.ManyToManyField(
+        to="self",
+        verbose_name="друзья",
+        blank=True
     )
 
     class Meta:
-        ordering = ("created_at",)
-        verbose_name = "код активации"
-        verbose_name_plural = "коды активации"
+        ordering = ("id",)
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
 
     def __str__(self):
-        return f"{self.user.username} | {self.created_at}"
+        return f"{self.pk} -> {self.username} -> {self.email}"
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            super().save(*args, **kwargs)
+        self.expired_code = timezone.now() + timedelta(minutes=3)
+        super().save(*args, **kwargs)

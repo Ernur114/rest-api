@@ -16,7 +16,6 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from loguru import logger
 
 from users.serializers import UserModelSerializer, UserSerializer
-from users.models import Codes
 from common.paginators import CustomPageNumberPagination
 
 
@@ -59,23 +58,23 @@ class UserViewSet(ViewSet):
             raise PermissionDenied(detail="you have no power here")
         return user
 
-    @action(
-        detail=False, methods=["GET"],
-        url_path="activate/(?P<code>[^/.]+)",
-        url_name="activate"
-    )
-    def activation_page(
-        self, request: Request, code: str
-    ) -> Response:
-        obj: Codes = get_object_or_404(Codes, code=code)
-        user = obj.user
-        now = timezone.now()
-        diff = now - obj.created_at
-        if diff.seconds > 180:
-            raise PermissionDenied()
-        user.is_active = True
-        user.save()
-        return Response(data={"message": "activation success!"})
+    # @action(
+    #     detail=False, methods=["GET"],
+    #     url_path="activate/(?P<code>[^/.]+)",
+    #     url_name="activate"
+    # )
+    # def activation_page(
+    #     self, request: Request, code: str
+    # ) -> Response:
+    #     obj: Codes = get_object_or_404(Codes, code=code)
+    #     user = obj.user
+    #     now = timezone.now()
+    #     diff = now - obj.created_at
+    #     if diff.seconds > 180:
+    #         raise PermissionDenied()
+    #     user.is_active = True
+    #     user.save()
+    #     return Response(data={"message": "activation success!"})
 
     @swagger_auto_schema(
         responses={200: UserSerializer(many=True)}

@@ -11,9 +11,9 @@ from rest_framework_simplejwt.views import (
 )
 
 from users.views import RegistrationViewSet, UserViewSet
-from chats.views import ChatsViewSet, MessagesViewSet
-from publics.views import PublicViewSet
-from images.views import GalleryView, ImagesView
+# from chats.views import ChatsViewSet, MessagesViewSet
+# from publics.views import PublicViewSet
+# from images.views import GalleryView, ImagesView
 
 
 router = DefaultRouter()
@@ -25,26 +25,26 @@ router.register(
     prefix="users", viewset=UserViewSet,
     basename="users"
 )
-router.register(
-    prefix="chats", viewset=ChatsViewSet,
-    basename="chats"
-)
-router.register(
-    prefix="messages", viewset=MessagesViewSet,
-    basename="messages"
-)
-router.register(
-    prefix="publics", viewset=PublicViewSet,
-    basename="publics"
-)
-router.register(
-    prefix="gallery", viewset=GalleryView,
-    basename="gallery"
-)
-router.register(
-    prefix="images", viewset=ImagesView,
-    basename="images"
-)
+# router.register(
+#     prefix="chats", viewset=ChatsViewSet,
+#     basename="chats"
+# )
+# router.register(
+#     prefix="messages", viewset=MessagesViewSet,
+#     basename="messages"
+# )
+# router.register(
+#     prefix="publics", viewset=PublicViewSet,
+#     basename="publics"
+# )
+# router.register(
+#     prefix="gallery", viewset=GalleryView,
+#     basename="gallery"
+# )
+# router.register(
+#     prefix="images", viewset=ImagesView,
+#     basename="images"
+# )
 
 schema_view = get_schema_view(
    openapi.Info(

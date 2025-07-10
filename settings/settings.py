@@ -15,6 +15,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+AUTH_USER_MODEL = "users.Client"
+
 INSTALLED_APPS = [
     "daphne",
     "rest_framework_simplejwt",
