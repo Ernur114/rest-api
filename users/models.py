@@ -12,6 +12,10 @@ def save_avatar_to(instance, filename):
 
 
 class Client(DirtyFieldsMixin, AbstractUser):
+    is_active = models.BooleanField(
+        verbose_name="активированный аккаунт",
+        default=False
+    )
     email = models.EmailField(
         verbose_name="эл. почта",
         max_length=100,
