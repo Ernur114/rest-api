@@ -1,7 +1,8 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.viewsets import ModelViewSet
-from django.contrib.auth.models import User
+
+from users.models import Client
 
 
 class IsOwnerOrAdmin(BasePermission):
@@ -25,7 +26,7 @@ class IsOwnerOrAdmin(BasePermission):
         return request.user.is_authenticated
 
     def has_object_permission(
-        self, request: Request, view: ModelViewSet, obj: User | None
+        self, request: Request, view: ModelViewSet, obj: Client | None
     ):
         if view.action in ["list", "retrieve"]:
             return True

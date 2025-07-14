@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from users.models import Client
@@ -21,12 +21,3 @@ def post_registration(
                 "code": str(instance.activation_code),
             }
         )
-
-
-@receiver(signal=pre_save, sender=Client)
-def activate_user(
-    instance: Client, **kwargs
-):
-    if instance.is_superuser:
-        instance.is_active = True
-        instance.save()
