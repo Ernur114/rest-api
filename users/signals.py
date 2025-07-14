@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from users.models import Client
@@ -9,11 +9,24 @@ from users.tasks import ActivateAccountTask
 def post_registration(
     sender: Client, instance: Client, created: bool, **kwargs
 ):
+    if instance.is_superuser:
+        return
+    
     if created:
         ActivateAccountTask().apply_async(
             kwargs={
+                "pk": instance.pk,
                 "username": instance.username,
                 "email": instance.email,
                 "code": str(instance.activation_code),
             }
         )
+
+
+@receiver(signal=pre_save, sender=Client)
+def activate_user(
+    instance: Client, **kwargs
+):
+    if instance.is_superuser:
+        instance.is_active = True
+        instance.save()

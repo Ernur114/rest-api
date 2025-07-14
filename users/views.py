@@ -1,6 +1,7 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, GenericViewSet, ModelViewSet
+from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import PermissionDenied
@@ -23,11 +24,14 @@ class RegistrationViewSet(mixins.CreateModelMixin, GenericViewSet):
     parser_classes = [MultiPartParser, FormParser]
 
 
-class ActivateAccount(ViewSet):
+class ActivateAccount(APIView):
     permission_classes = [AllowAny]
 
-    def retrieve(self, request: Request, pk: str) -> Response:
-        user: Client = get_object_or_404(Client, activation_code=pk)
+    def get(self, request: Request, pk: int) -> Response:
+        code = request.query_params.get("code")
+        user: Client = get_object_or_404(
+            Client, pk=pk, activation_code=code
+        )
         now = timezone.now()
         if now > user.expired_code:
             raise PermissionDenied()

@@ -21,7 +21,9 @@ class Client(DirtyFieldsMixin, AbstractUser):
     activation_code = models.UUIDField(
         verbose_name="код активации", unique=True, default=uuid.uuid4
     )
-    expired_code = models.DateTimeField(verbose_name="срок действия кода")
+    expired_code = models.DateTimeField(
+        verbose_name="срок действия кода"
+    )
     avatar = models.ImageField(
         verbose_name="аватар пользователя",
         upload_to=save_avatar_to,

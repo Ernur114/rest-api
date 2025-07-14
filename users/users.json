@@ -1,28 +1,6 @@
 [
 {
     "model": "users.client",
-    "pk": 1,
-    "fields": {
-        "password": "pbkdf2_sha256$1000000$NolTi3s29rq6WXZHD51pNH$z5ypEcT29+lg89YhZARbc9IYK6Xe1xpEebHFrJE0ojc=",
-        "last_login": null,
-        "is_superuser": true,
-        "username": "Brick_92",
-        "first_name": "",
-        "last_name": "",
-        "is_staff": true,
-        "date_joined": "2025-07-14T06:45:07.508Z",
-        "is_active": true,
-        "email": "root@root.root",
-        "activation_code": "0e7b81e3-4c15-4f01-b8cd-b360601143ef",
-        "expired_code": "2025-07-14T06:48:07.690Z",
-        "avatar": "",
-        "groups": [],
-        "user_permissions": [],
-        "friends": []
-    }
-},
-{
-    "model": "users.client",
     "pk": 102,
     "fields": {
         "password": "pbkdf2_sha256$1000000$7BJCBOJ2Bq84mkyM26KVBV$7Rq0/U8m7lx7tU52i1jjamBNzaRiKCoigfbORuScWdM=",
@@ -40,7 +18,9 @@
         "avatar": "",
         "groups": [],
         "user_permissions": [],
-        "friends": []
+        "friends": [
+            602
+        ]
     }
 },
 {
@@ -62,7 +42,9 @@
         "avatar": "",
         "groups": [],
         "user_permissions": [],
-        "friends": []
+        "friends": [
+            602
+        ]
     }
 },
 {
@@ -84,7 +66,9 @@
         "avatar": "",
         "groups": [],
         "user_permissions": [],
-        "friends": []
+        "friends": [
+            602
+        ]
     }
 },
 {
@@ -106,7 +90,9 @@
         "avatar": "",
         "groups": [],
         "user_permissions": [],
-        "friends": []
+        "friends": [
+            602
+        ]
     }
 },
 {
@@ -128,7 +114,9 @@
         "avatar": "",
         "groups": [],
         "user_permissions": [],
-        "friends": []
+        "friends": [
+            602
+        ]
     }
 },
 {
@@ -11015,6 +11003,56 @@
         "email": "user_500@gmail.com",
         "activation_code": "47f7189a-91df-426c-8c24-ee7d7cd3260f",
         "expired_code": "2025-07-14T06:52:43.999Z",
+        "avatar": "",
+        "groups": [],
+        "user_permissions": [],
+        "friends": []
+    }
+},
+{
+    "model": "users.client",
+    "pk": 602,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$JfrZOyPmmF8PfpAKWrMBy7$5DaSM24bfDcj9Beo0HC0rg8J6rGkkKWV8//2PmUqKx8=",
+        "last_login": "2025-07-14T07:50:13Z",
+        "is_superuser": true,
+        "username": "Brick_92",
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "date_joined": "2025-07-14T07:46:10Z",
+        "is_active": true,
+        "email": "root@root.root",
+        "activation_code": "f02612fd-9326-4c70-b17f-540540cc3523",
+        "expired_code": "2025-07-14T07:55:42.649Z",
+        "avatar": "",
+        "groups": [],
+        "user_permissions": [],
+        "friends": [
+            102,
+            103,
+            104,
+            105,
+            106
+        ]
+    }
+},
+{
+    "model": "users.client",
+    "pk": 607,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$KpB4b548VdneAKbN4piEMI$HGiCPT7SEjeCShVN50pb2NdsSdc2jxFC8n3EVtTrUQA=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "Brick",
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "date_joined": "2025-07-14T14:02:04.328Z",
+        "is_active": true,
+        "email": "metallugabns@yandex.kz",
+        "activation_code": "3cd6b67c-2846-4ce3-af62-7b983c60c36a",
+        "expired_code": "2025-07-14T14:05:36.056Z",
         "avatar": "",
         "groups": [],
         "user_permissions": [],

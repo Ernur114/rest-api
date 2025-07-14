@@ -8,19 +8,22 @@ class ActivateAccountTask(Task):
     name = "activate-account"
     default_retry_delay = 60
 
-    def run(self, username: str, email: str, code: str):
+    def run(self, pk:int, username: str, email: str, code: str):
         try:
             send_email(
-                template="activation.html",
+                template="activation.html", to=email,
                 context={
                     "username": username,
-                    "code": f"http://127.0.0.1:8000/api/v1/users/activate/{code}",
+                    "code": ("http://127.0.0.1:8000/api/v1/"
+                             f"users/activate/{pk}/?code={code}"),
                 },
-                to=email,
                 title="Confirm your account",
             )
         except Exception as e:
-            self.retry(exc=e, countdown=60 * (self.request.retries + 1))
+            raise self.retry(
+                exc=e, 
+                countdown=60 * (self.request.retries + 1)
+            )
 
 
 celery_app.register_task(task=ActivateAccountTask())
