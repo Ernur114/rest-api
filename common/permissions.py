@@ -27,7 +27,6 @@ class IsOwnerOrAdmin(BasePermission):
     def has_object_permission(
         self, request: Request, view: ModelViewSet, obj: User | None
     ):
-        if request.user.is_staff:
-            return True # Пускаем админов
-        if isinstance(obj, User):
-            return obj == request.user    
+        if view.action in ["list", "retrieve"]:
+            return True
+        return obj == request.user or request.user.is_staff  

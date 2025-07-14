@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from users.views import RegistrationViewSet, ActivateAccount
+from users.views import RegistrationViewSet, ActivateAccount, UserModelViewSet
 # from chats.views import ChatsViewSet, MessagesViewSet
 # from publics.views import PublicViewSet
 # from images.views import GalleryView, ImagesView
@@ -25,10 +25,10 @@ router.register(
     prefix="activate", viewset=ActivateAccount, 
     basename="activate"
 )
-# router.register(
-#     prefix="users", viewset=UserViewSet,
-#     basename="users"
-# )
+router.register(
+    prefix="users", viewset=UserModelViewSet,
+    basename="users"
+)
 # router.register(
 #     prefix="chats", viewset=ChatsViewSet,
 #     basename="chats"
