@@ -43,10 +43,17 @@ class Client(DirtyFieldsMixin, AbstractUser):
         return f"{self.pk} -> {self.username} -> {self.email}"
 
     def save(self, *args, **kwargs):
+        if self.is_superuser:
+            self.is_active = True
+            self.expired_code = timezone.now()
+            super().save(*args, **kwargs)
+            return
         if self.pk:
             super().save(*args, **kwargs)
+            return
         self.expired_code = timezone.now() + timedelta(minutes=3)
         super().save(*args, **kwargs)
+        return
 
 
 class FriendInvite(models.Model):
